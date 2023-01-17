@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,7 +21,7 @@
     <normaloff>:/Icon/8k.png</normaloff>:/Icon/8k.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="download">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -33,12 +36,6 @@
     <property name="icon">
      <iconset resource="../Img/resource.qrc">
       <normaloff>:/Icon/plus.png</normaloff>:/Icon/plus.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
     </property>
    </widget>
    <widget class="QTableView" name="tableView">
