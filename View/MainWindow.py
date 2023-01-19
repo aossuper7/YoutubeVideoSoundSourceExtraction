@@ -14,8 +14,7 @@ class MainWindows(QMainWindow, main):
         self.show()
 
     def downloadInfoWindows(self):
-        down = GetInfo.GetInfo(self)
-        down.show()
+        down = GetInfoWindow.GetInfo(self)
 
 
 if __name__ == '__main__':
