@@ -13,6 +13,9 @@
     <height>80</height>
    </rect>
   </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
   <property name="windowTitle">
    <string>정보 가져오는중</string>
   </property>

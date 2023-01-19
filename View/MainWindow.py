@@ -1,5 +1,5 @@
 import sys
-import GetInfo
+import GetInfoWindow
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
 

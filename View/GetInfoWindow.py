@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow
 
-second = uic.loadUiType('./GetInfo.ui')[0]
+second = uic.loadUiType('./GetInfoWindows.ui')[0]
 
 
 class GetInfo(QMainWindow, second):

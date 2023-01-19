@@ -17,7 +17,7 @@
    <string>Youtube Video Extraction</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../Img/resource.qrc">
+   <iconset>
     <normaloff>:/Icon/8k.png</normaloff>:/Icon/8k.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -34,7 +34,7 @@
      <string>다운로드</string>
     </property>
     <property name="icon">
-     <iconset resource="../Img/resource.qrc">
+     <iconset>
       <normaloff>:/Icon/plus.png</normaloff>:/Icon/plus.png</iconset>
     </property>
    </widget>
@@ -50,6 +50,12 @@
     <property name="whatsThis">
      <string/>
     </property>
+    <property name="showGrid">
+     <bool>true</bool>
+    </property>
+    <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+     <bool>false</bool>
+    </attribute>
    </widget>
   </widget>
  </widget>
