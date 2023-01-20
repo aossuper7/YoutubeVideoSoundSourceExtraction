@@ -1,8 +1,7 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QMessageBox
-from Model import YoutubeInfo
+from PyQt5.QtWidgets import QMainWindow, QApplication
 
-second = uic.loadUiType('./GetInfoWindows.ui')[0]
+second = uic.loadUiType('../View/GetInfoWindows.ui')[0]
 
 
 class GetInfo(QMainWindow, second):
@@ -10,11 +9,4 @@ class GetInfo(QMainWindow, second):
         super().__init__(parent)
         self.setupUi(self)
         self.show()
-        self.getYoutubeInfo()
-
-    def getYoutubeInfo(self):
-        try:
-            YoutubeInfo.YoutubeInfo()
-        except:
-            self.close()
-            QMessageBox.warning(self, 'Youtube Downloader', '지원하지 않는 사이트 입니다.')
+        QApplication.processEvents()
