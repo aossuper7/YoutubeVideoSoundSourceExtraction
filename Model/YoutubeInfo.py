@@ -17,4 +17,4 @@ class YoutubeInfo:
             youtubeInfoSearchWindow.close()
 
     def saveYoutubeInfo(self):
-        self.info = self.youtube.streams.all()
+        self.info = self.youtube.streams

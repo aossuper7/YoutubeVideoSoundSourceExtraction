@@ -8,7 +8,7 @@ import sys
 
 class mainControll:
     def __init__(self):
-        self.mainWindow = MainWindow.MainWindows()
+        self.mainWindow = MainWindow.MainWindows(self)
 
     def downloadClickEvent(self, parent):
         info = GetInfoWindow.GetInfo(parent)

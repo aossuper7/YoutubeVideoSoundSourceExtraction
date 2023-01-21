@@ -7,8 +7,8 @@ main = uic.loadUiType('../View/MainWindows.ui')[0]
 
 
 class MainWindows(QMainWindow, main):
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
         self.setupUi(self)
-        self.download.clicked.connect(lambda: Controller.mainControll().downloadClickEvent(self))
+        self.download.clicked.connect(lambda: controller.downloadClickEvent(self))
         self.show()
