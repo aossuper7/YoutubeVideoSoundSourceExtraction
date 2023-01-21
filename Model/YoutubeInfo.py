@@ -4,9 +4,10 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class YoutubeInfo:
-    def __init__(self):
-        self.info = None
+    def __init__(self, youtubeInfoSearchWindow):
+        self.picture = []
         self.youtube = None
+        self.checkLink(youtubeInfoSearchWindow)
 
     def checkLink(self, youtubeInfoSearchWindow):
         try:
@@ -16,5 +17,15 @@ class YoutubeInfo:
             QMessageBox.warning(youtubeInfoSearchWindow, '8k Youtube downloader', '잘못된 링크 입니다.')
             youtubeInfoSearchWindow.close()
 
-    def saveYoutubeInfo(self):
-        self.info = self.youtube.streams
+    def loadPictureList(self):
+        resolution = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p']
+        for i in range(len(resolution)):
+            youtube = self.youtube.streams\
+                                    .filter(mime_type='video/mp4', progressive=False, res=resolution[i])\
+                                    .order_by('mime_type')\
+                                    .asc()
+            if youtube is not None:
+                self.picture.append(youtube)
+
+    def getPicture(self):
+        return self.picture

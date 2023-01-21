@@ -12,9 +12,11 @@ class mainControll:
 
     def downloadClickEvent(self, parent):
         info = GetInfoWindow.GetInfo(parent)
-        youtube = YoutubeInfo.YoutubeInfo()
+        youtube = YoutubeInfo.YoutubeInfo(info)
+        self.startThread(youtube.loadPictureList)
 
-        t1 = Thread(target=youtube.checkLink, args=(info,))
+    def startThread(self, methodAddress):
+        t1 = Thread(target=methodAddress)
         t1.daemon = True
         t1.start()
 
