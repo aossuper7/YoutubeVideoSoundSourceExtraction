@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QPixmap
+from PyQt5.Qt import Qt
 
 Choice = uic.loadUiType('../View/ChoiceWindows.ui')[0]
 
@@ -22,5 +23,5 @@ class ChoiceWindow(QMainWindow, Choice):
 
         self.title.setText(self.youtubeInfo['title'])
         self.time.setText(self.youtubeInfo['time'])
-        self.url.setText('<a href=\\\"'+self.youtubeInfo['url']+'\">'+self.youtubeInfo['url']+'</a>')
-        self.url.setOpenExternalLinks(True)
+        self.url.setText('<a href=\"'+self.youtubeInfo['url']+'\">'+self.youtubeInfo['url']+'</a>')
+
