@@ -32,4 +32,4 @@ class YoutubeInfo:
         self.main.loadingBar(1, 0.13)
 
     def getPictureInfo(self):
-        return {'picture': self.picture, 'info': self.youtube}
+        return self.picture

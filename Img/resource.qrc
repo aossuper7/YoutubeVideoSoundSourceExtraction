@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="Icon">
+    <file>link.png</file>
+    <file>clock.png</file>
     <file>8k.png</file>
     <file>plus.png</file>
   </qresource>
