@@ -24,13 +24,12 @@ class YoutubeInfo:
         resolution = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p']
         Thread(target=self.main.loadingBar, args=(99, 0.13), daemon=True).start()
         for i in range(len(resolution)):
-            youtube = self.youtube.streams\
-                                    .filter(mime_type='video/mp4', progressive=False, res=resolution[i])\
-                                    .order_by('mime_type')\
-                                    .asc()
-            if youtube is not None:
+            youtube = self.youtube.streams \
+                                    .filter(mime_type='video/mp4', progressive=False, res=resolution[i]) \
+                                    .first()
+            if youtube:
                 self.picture.append(youtube)
-        self.main.loadingBar(1, 0)
+        self.main.loadingBar(1, 0.13)
 
-    def getPicture(self):
-        return self.picture
+    def getPictureInfo(self):
+        return {'picture': self.picture, 'info': self.youtube}
