@@ -19,13 +19,14 @@ class mainControll:
         self.parent = parent
         self.info = GetInfoWindow.GetInfo(self.parent)
         youtube = YoutubeMovieList.YoutubeInfo(self.info, self)
-        youtubeInfo = YoutubeInfoList.InfoList()
-        Thread(target=youtubeInfo.setInfo, daemon=True).start()
-        t1 = Thread(target=youtube.loadPictureList, daemon=True)
-        t1.start()
-        t1.join()
-        self.info.close()
-        choice = ChoiceWindow.ChoiceWindow(self.parent, youtube.getPictureInfo(), youtubeInfo.getInfo())
+        if youtube.checkLink():
+            youtubeInfo = YoutubeInfoList.InfoList()
+            Thread(target=youtubeInfo.setInfo, daemon=True).start()
+            t1 = Thread(target=youtube.loadPictureList, daemon=True)
+            t1.start()
+            t1.join()
+            self.info.close()
+            choice = ChoiceWindow.ChoiceWindow(self.parent, youtube.getPictureInfo(), youtubeInfo.getInfo())
 
     def loadingBar(self, value, time):
         self.value += value

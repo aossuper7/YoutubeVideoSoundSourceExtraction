@@ -10,12 +10,12 @@ class YoutubeInfo:
         self.youtube = None
         self.youtubeInfoSearchWindow = youtubeInfoSearchWindow
         self.main = main
-        self.checkLink()
 
     def checkLink(self):
         try:
             self.youtube = pytube.YouTube(pyperclip.paste())
             self.youtube.check_availability()  # youtube 링크 체크
+            return True
         except:
             QMessageBox.warning(self.youtubeInfoSearchWindow, '8k Youtube downloader', '잘못된 링크 입니다.')
             self.youtubeInfoSearchWindow.close()
@@ -25,11 +25,23 @@ class YoutubeInfo:
         Thread(target=self.main.loadingBar, args=(99, 0.13), daemon=True).start()
         for i in range(len(resolution)):
             youtube = self.youtube.streams \
-                                    .filter(mime_type='video/mp4', progressive=False, res=resolution[i]) \
-                                    .first()
+                .filter(mime_type='video/mp4', progressive=False, res=resolution[i]) \
+                .first()
             if youtube:
                 self.picture.append(youtube)
         self.main.loadingBar(1, 0.13)
 
     def getPictureInfo(self):
-        return self.picture
+        videoInfo = []
+        for i in range(len(self.picture)):
+            videoInfo.append([self.distinguishResolution(self.picture[i]),
+                              self.picture[i].resolution + ' ' + str(self.picture[i].fps) + 'fps',
+                              str(round(self.picture[i].filesize_mb, 1)) + 'MB'])
+        return videoInfo
+
+    def distinguishResolution(self, youtube):
+        resolution = int(youtube.resolution[:-1])
+        if resolution >= 480:
+            return '고화질'
+        elif resolution >= 240:
+            return '일반 화질'
