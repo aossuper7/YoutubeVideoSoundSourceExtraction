@@ -1,3 +1,5 @@
+import threading
+
 import View.MainWindow as MainWindow
 import View.GetInfoWindow as GetInfoWindow
 import View.ChoiceWindow as ChoiceWindow
@@ -13,20 +15,24 @@ class mainControll:
         self.mainWindow = MainWindow.MainWindows(self)
         self.info = None
         self.parent = None
+        self.youtube = None
+        self.youtubeInfo = None
         self.value = 0
 
     def downloadClickEvent(self, parent):
         self.parent = parent
         self.info = GetInfoWindow.GetInfo(self.parent)
-        youtube = YoutubeMovieList.YoutubeInfo(self.info, self)
-        if youtube.checkLink():
-            youtubeInfo = YoutubeInfoList.InfoList()
-            Thread(target=youtubeInfo.setInfo, daemon=True).start()
-            t1 = Thread(target=youtube.loadPictureList, daemon=True)
-            t1.start()
-            t1.join()
+        self.youtube = YoutubeMovieList.YoutubeInfo(self.info, self)
+        eve = threading.Event()
+        if self.youtube.checkLink():
+            self.youtubeInfo = YoutubeInfoList.InfoList()
+            Thread(target=self.youtubeInfo.setInfo, daemon=True).start()
+            Thread(target=self.youtube.loadPictureList, args=(eve,), daemon=True).start()
+
+        if eve.wait():
             self.info.close()
-            choice = ChoiceWindow.ChoiceWindow(self.parent, youtube.getPictureInfo(), youtubeInfo.getInfo())
+            choice = ChoiceWindow.ChoiceWindow(self.parent, self.youtube.getPictureInfo(),
+                                               self.youtubeInfo.getInfo())
 
     def loadingBar(self, value, time):
         self.value += value
