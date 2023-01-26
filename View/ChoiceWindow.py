@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QRadioButton, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
+import sys
 
 Choice = uic.loadUiType('../View/ChoiceWindows.ui')[0]
 
@@ -15,7 +16,9 @@ class ChoiceWindow(QMainWindow, Choice):
         self.setYoutubeInfo()
         self.setList()
         self.show()
+        self.closeEvent()
         QApplication.processEvents()
+        QApplication(sys.argv).exec_()
 
     def setYoutubeInfo(self):
         img = QPixmap()
