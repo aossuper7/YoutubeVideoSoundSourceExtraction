@@ -1,12 +1,9 @@
-import threading
-
 import View.MainWindow as MainWindow
 import View.GetInfoWindow as GetInfoWindow
 import View.ChoiceWindow as ChoiceWindow
 from PyQt5.QtWidgets import QApplication
 from Model import YoutubeMovieList, YoutubeInfoList, LoadingBar
-from threading import Thread
-from time import sleep
+import threading as th
 import sys
 
 
@@ -18,22 +15,23 @@ class mainControll:
         self.YoutubeMovieList = None
         self.YoutubeInfoList = None
         self.loadingBar = None
+        self.eve = [th.Event(), th.Event()]
 
     def downloadClickEvent(self, parent):
         self.parent = parent
-        self.GetInfoWindow = GetInfoWindow.GetInfo(self.parent)
-        self.YoutubeMovieList = YoutubeMovieList.YoutubeInfo(self.GetInfoWindow, self)
+        self.GetInfoWindow = GetInfoWindow.GetInfo(self.parent, self)
         self.loadingBar = LoadingBar.loadingBar(self.GetInfoWindow)
-        eve = threading.Event()
+        self.YoutubeMovieList = YoutubeMovieList.YoutubeInfo(self.GetInfoWindow, self)
         if self.YoutubeMovieList.checkLink():
             self.YoutubeInfoList = YoutubeInfoList.InfoList()
-            Thread(target=self.YoutubeInfoList.setInfo, daemon=True).start()
-            Thread(target=self.YoutubeMovieList.loadPictureList, args=(eve,), daemon=True).start()
-            Thread(target=self.newWindow, args=(eve,), daemon=True).start()
+            th.Thread(target=self.YoutubeInfoList.setInfo, daemon=True).start()
+            th.Thread(target=self.YoutubeMovieList.loadPictureList, args=(self.eve,), daemon=True).start()
+            th.Thread(target=self.newWindow, args=(self.eve,), daemon=True).start()
 
     def newWindow(self, eve):
-        eve.wait()
-        self.GetInfoWindow.close()
+        if eve[0].is_set():
+            return
+        eve[1].wait()
         choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeMovieList.getPictureInfo(),
                                            self.YoutubeInfoList.getInfo())
 

@@ -29,8 +29,10 @@ class YoutubeInfo:
                 .first()
             if youtube:
                 self.picture.append(youtube)
+            if eve[0].is_set():
+                return
         self.main.setLoading(1, 0.13)
-        eve.set()
+        eve[1].set()
 
     def getPictureInfo(self):
         videoInfo = []
