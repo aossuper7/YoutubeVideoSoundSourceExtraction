@@ -16,7 +16,6 @@ class ChoiceWindow(QMainWindow, Choice):
         self.setYoutubeInfo()
         self.setList()
         self.show()
-        self.closeEvent()
         QApplication.processEvents()
         QApplication(sys.argv).exec_()
 
