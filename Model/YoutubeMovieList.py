@@ -1,15 +1,20 @@
 import pytube
 import pyperclip
 from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import *
 from threading import Thread
 
 
-class YoutubeInfo:
-    def __init__(self, youtubeInfoSearchWindow, main):
+class YoutubeInfo(QObject):
+    signal = pyqtSignal()
+
+    def __init__(self, main):
+        super().__init__()
         self.picture = []
         self.youtube = None
-        self.youtubeInfoSearchWindow = youtubeInfoSearchWindow
+        self.GetInfoWindow = main.GetInfoWindow
         self.main = main
+        self.signal.connect(lambda: main.newWindow())
 
     def checkLink(self):
         try:
@@ -17,8 +22,8 @@ class YoutubeInfo:
             self.youtube.check_availability()  # youtube 링크 체크
             return True
         except:
-            QMessageBox.warning(self.youtubeInfoSearchWindow, '8k Youtube downloader', '잘못된 링크 입니다.')
-            self.youtubeInfoSearchWindow.close()
+            QMessageBox.warning(self.GetInfoWindow, '8k Youtube downloader', '잘못된 링크 입니다.')
+            self.GetInfoWindow.close()
 
     def loadPictureList(self, eve):
         resolution = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p']
@@ -27,12 +32,12 @@ class YoutubeInfo:
             youtube = self.youtube.streams \
                 .filter(mime_type='video/mp4', progressive=False, res=resolution[i]) \
                 .first()
+            if eve.is_set():
+                return
             if youtube:
                 self.picture.append(youtube)
-            if eve[0].is_set():
-                return
         self.main.setLoading(1, 0.13)
-        eve[1].set()
+        self.signal.emit()
 
     def getPictureInfo(self):
         videoInfo = []
