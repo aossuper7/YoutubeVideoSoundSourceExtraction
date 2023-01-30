@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QRadioButton, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
+import os
 
 Choice = uic.loadUiType('../View/ChoiceWindows.ui')[0]
 
@@ -12,6 +13,7 @@ class ChoiceWindow(QMainWindow, Choice):
         self.setupUi(self)
         self.youtube = youtubeList
         self.youtubeInfo = youtubeInfo
+        self.saveStorage = os.path.expanduser('~')
         self.setYoutubeInfo()
         self.setList()
         self.show()
@@ -24,6 +26,7 @@ class ChoiceWindow(QMainWindow, Choice):
         self.title.setText(self.youtubeInfo['title'])
         self.time.setText(self.youtubeInfo['time'])
         self.url.setText('<a href=\"' + self.youtubeInfo['url'] + '\">' + self.youtubeInfo['url'] + '</a>')
+        self.storage.setText(self.saveStorage + 'Desktop' + self.youtubeInfo['title'] + '.mp4')
 
     def setList(self):
         Ysize = 0

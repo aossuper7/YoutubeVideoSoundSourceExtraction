@@ -21,25 +21,30 @@ class mainControll:
     def downloadClickEvent(self, parent):
         self.parent = parent
         self.GetInfoWindow = GetInfoWindow.GetInfo(self)
-        self.loadingBar = LoadingBar.loadingBar(self)
+        self.eve = th.Event()
+        self.loadingBar = LoadingBar.loadingBar(self, self.eve)
         self.YoutubeMovieList = YoutubeMovieList.YoutubeInfo(self)
         if self.YoutubeMovieList.checkLink():
-            self.YoutubeInfoList = YoutubeInfoList.InfoList()
-            self.eve = th.Event()
-            th.Thread(target=self.YoutubeInfoList.setInfo, daemon=True).start()
-            th.Thread(target=self.YoutubeMovieList.loadPictureList, args=(self.eve,), daemon=True).start()
+            self.YoutubeInfoList = YoutubeInfoList.InfoList(self)
+            th.Thread(target=self.saveYoutube, daemon=True).start()
 
     @pyqtSlot()
     def newWindow(self):
         self.GetInfoWindow.close()
-        choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeMovieList.getPictureInfo(),
+        choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeInfoList.getPictureInfo(),
                                            self.YoutubeInfoList.getInfo())
 
-    def setLoading(self, value, time):
+    def setLoading(self, value, time=0):
         self.loadingBar.setLoading(value, time)
+
+    def saveYoutube(self):
+        self.YoutubeMovieList.loadPictureList(self.eve)
+        if self.eve.is_set():
+            return
+        self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture())
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     dd = mainControll()
-    app.exec_()
+    sys.exit(app.exec_())
