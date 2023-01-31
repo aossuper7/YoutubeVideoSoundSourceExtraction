@@ -32,7 +32,7 @@ class mainControll:
     def newWindow(self):
         self.GetInfoWindow.close()
         choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeInfoList.getPictureInfo(),
-                                           self.YoutubeInfoList.getInfo())
+                                           self.YoutubeInfoList.getInfo(), self)
 
     def setLoading(self, value, time=0):
         self.loadingBar.setLoading(value, time)
@@ -42,6 +42,9 @@ class mainControll:
         if self.eve.is_set():
             return
         self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture())
+
+    def downloadEvent(self, num, storage):
+        th.Thread(target=self.YoutubeMovieList.downloadPicture, args=(num, storage), daemon=True).start()
 
 
 if __name__ == '__main__':
