@@ -59,4 +59,4 @@ class ChoiceWindow(QMainWindow, Choice):
     def downloadEvent(self):
         for i, radioBtn in enumerate(self.radioBtn):
             if radioBtn.isChecked():
-                self.main.downloadEvent(i, self.saveStorage + '\Desktop\\')
+                self.main.downloadEvent(i, self.saveStorage)

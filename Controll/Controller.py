@@ -16,6 +16,7 @@ class mainControll:
         self.YoutubeMovieList = None
         self.YoutubeInfoList = None
         self.loadingBar = None
+        self.choice = None
         self.eve = None
 
     def downloadClickEvent(self, parent):
@@ -31,7 +32,7 @@ class mainControll:
     @pyqtSlot()
     def newWindow(self):
         self.GetInfoWindow.close()
-        choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeInfoList.getPictureInfo(),
+        self.choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeInfoList.getPictureInfo(),
                                            self.YoutubeInfoList.getInfo(), self)
 
     def setLoading(self, value, time=0):
@@ -41,10 +42,11 @@ class mainControll:
         self.YoutubeMovieList.loadPictureList(self.eve)
         if self.eve.is_set():
             return
-        self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture())
+        self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture(), self.YoutubeMovieList.getAudio())
 
     def downloadEvent(self, num, storage):
-        th.Thread(target=self.YoutubeMovieList.downloadPicture, args=(num, storage), daemon=True).start()
+        self.YoutubeMovieList.downloadPicture(num, storage)
+        self.choice.close()
 
 
 if __name__ == '__main__':
