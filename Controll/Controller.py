@@ -49,6 +49,9 @@ class mainControll:
         self.YoutubeMovieList.downloadPicture(num, storage)
         self.choice.close()
 
+    def downlaodAudioEvent(self, num, storage):
+        self.YoutubeMovieList.downloadAudio(num, storage)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

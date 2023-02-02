@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QRadioButton, QLabel
+from PyQt5.QtWidgets import QMainWindow, QApplication, QRadioButton, QLabel, QFileDialog
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 import os
@@ -24,6 +24,7 @@ class ChoiceWindow(QMainWindow, Choice):
         self.closebtn.clicked.connect(lambda: self.close())
         self.download.clicked.connect(lambda: self.downloadPictureEvent())
         self.comboBox.currentTextChanged.connect(lambda: self.modifyUi())
+        self.save.clicked.connect(lambda: self.fileOpne())
         self.show()
         QApplication.processEvents()
 
@@ -53,6 +54,7 @@ class ChoiceWindow(QMainWindow, Choice):
             label2.setAlignment(Qt.AlignRight)
             btn = QRadioButton(youtube[0].ljust(120), self.groupBox)
             btn.move(20, 10 + Ysize)
+            btn.clicked.connect(lambda: self.setPictureStorage())
             Ysize += 40
             self.radioBtn.append(btn)
 
@@ -68,6 +70,7 @@ class ChoiceWindow(QMainWindow, Choice):
             label3.setAlignment(Qt.AlignRight)
             btn = QRadioButton(audio[0].ljust(120), self.groupBox_2)
             btn.move(20, 10 + Ysize)
+            btn.clicked.connect(lambda: self.setAudioStorage())
             Ysize += 40
             self.audioBtn.append(btn)
 
@@ -98,6 +101,38 @@ class ChoiceWindow(QMainWindow, Choice):
         self.groupBox_2.setGeometry(0, 170, 791, 10 + size)
 
     def downloadPictureEvent(self):
-        for i, radioBtn in enumerate(self.radioBtn):
-            if radioBtn.isChecked():
-                self.main.downloadPictureEvent(i, self.saveStorage)
+        if self.state == 1:
+            for i, radioBtn in enumerate(self.radioBtn):
+                if radioBtn.isChecked():
+                    self.main.downloadPictureEvent(i, self.saveStorage)
+                    return
+        else:
+            for i, radioBtn in enumerate(self.audioBtn):
+                if radioBtn.isChecked():
+                    self.main.downlaodAudioEvent(i, self.saveStorage)
+                    return
+
+    def setPictureStorage(self):
+        url = self.storage.text().split('.')
+        url[1] = '.mp4'
+        self.saveStorage = url[0] + url[1]
+        self.storage.setText(self.saveStorage)
+
+    def setAudioStorage(self):
+        url = self.storage.text().split('.')
+        for i, btn in enumerate(self.audioBtn):
+            if btn.isChecked():
+                url[1] = '.' + self.audioInfo[i][2]
+                self.saveStorage = url[0] + url[1]
+                self.storage.setText(self.saveStorage)
+                return
+
+    def fileOpne(self):
+        fname = None
+        if self.state == 1:
+            fname = QFileDialog.getSaveFileName(self, filter='영상 (*.mp4)')
+        else:
+            fname = QFileDialog.getSaveFileName(self, filter='오디오 (*.webm *.mp4)')
+        if fname[0]:
+            self.saveStorage = fname[0]
+            self.storage.setText(str(self.saveStorage))

@@ -50,8 +50,18 @@ class YoutubeInfo:
             self.audioList.append(audio)
 
     def downloadPicture(self, num, storage):
+        fileName, storage = self.modifyStorage(storage)
         mp.Process(target=self.picture[num].download, args=(storage, 'video.mp4'), daemon=True).start()
         mp.Process(target=self.audio.download, args=(storage, 'audio.mp3'), daemon=True).start()
+
+    def downloadAudio(self, num, storage):
+        fileName, storage = self.modifyStorage(storage)
+        mp.Process(target=self.audioList[num].download, args=(storage, fileName), daemon=True).start()
+
+    def modifyStorage(self, storage):
+        fileName = storage.split('/')
+        storage = storage.replace(fileName[-1], '')
+        return fileName[-1], storage
 
     def getPicture(self):
         return self.picture
