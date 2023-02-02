@@ -33,7 +33,7 @@ class mainControll:
     def newWindow(self):
         self.GetInfoWindow.close()
         self.choice = ChoiceWindow.ChoiceWindow(self.parent, self.YoutubeInfoList.getPictureInfo(),
-                                           self.YoutubeInfoList.getInfo(), self)
+                                           self.YoutubeInfoList.getInfo(), self, self.YoutubeInfoList.getAudioInfo())
 
     def setLoading(self, value, time=0):
         self.loadingBar.setLoading(value, time)
@@ -42,9 +42,10 @@ class mainControll:
         self.YoutubeMovieList.loadPictureList(self.eve)
         if self.eve.is_set():
             return
-        self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture(), self.YoutubeMovieList.getAudio())
+        self.YoutubeInfoList.setInfo(self.YoutubeMovieList.getPicture(), self.YoutubeMovieList.getAudio(),
+                                     self.YoutubeMovieList.getAudioList())
 
-    def downloadEvent(self, num, storage):
+    def downloadPictureEvent(self, num, storage):
         self.YoutubeMovieList.downloadPicture(num, storage)
         self.choice.close()
 

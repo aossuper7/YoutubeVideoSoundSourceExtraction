@@ -10,6 +10,7 @@ class YoutubeInfo:
     def __init__(self, main):
         super().__init__()
         self.picture = []
+        self.audioList = []
         self.audio = None
         self.youtube = None
         self.GetInfoWindow = main.GetInfoWindow
@@ -26,8 +27,9 @@ class YoutubeInfo:
 
     def loadPictureList(self, eve):
         resolutions = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p']
-        t1 = Thread(target=self.main.setLoading, args=(99, 0.005), daemon=True)
+        t1 = Thread(target=self.main.setLoading, args=(99, 0.0005), daemon=True)
         t1.start()
+        self.loadAudioList(eve)
         for resolution in resolutions:
             youtube = self.youtube.streams \
                 .filter(mime_type='video/mp4', progressive=False, res=resolution) \
@@ -36,9 +38,16 @@ class YoutubeInfo:
                 return
             if youtube:
                 self.picture.append(youtube)
-        self.audio = self.youtube.streams.get_audio_only()
         t1.join()
+        self.audio = self.youtube.streams.get_audio_only()
         self.main.setLoading(1)
+
+    def loadAudioList(self, eve):
+        audios = self.youtube.streams.filter(only_audio=True).order_by('abr').desc()
+        for audio in audios:
+            if eve.is_set():
+                return
+            self.audioList.append(audio)
 
     def downloadPicture(self, num, storage):
         mp.Process(target=self.picture[num].download, args=(storage, 'video.mp4'), daemon=True).start()
@@ -49,3 +58,6 @@ class YoutubeInfo:
 
     def getAudio(self):
         return self.audio
+
+    def getAudioList(self):
+        return self.audioList
