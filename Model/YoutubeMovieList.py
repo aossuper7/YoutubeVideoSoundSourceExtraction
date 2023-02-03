@@ -59,7 +59,7 @@ class YoutubeInfo:
         mp.Process(target=self.audioList[num].download, args=(storage, fileName), daemon=True).start()
 
     def modifyStorage(self, storage):
-        fileName = storage.split('/')
+        fileName = storage.split('\\')
         storage = storage.replace(fileName[-1], '')
         return fileName[-1], storage
 

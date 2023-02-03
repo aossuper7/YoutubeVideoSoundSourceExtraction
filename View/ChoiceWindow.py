@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QRadioButton, QLabel, QFi
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 import os
+import re
 
 Choice = uic.loadUiType('../View/ChoiceWindows.ui')[0]
 
@@ -16,7 +17,6 @@ class ChoiceWindow(QMainWindow, Choice):
         self.youtubeInfo = youtubeInfo
         self.audioInfo = audioInfo
         self.state = 0
-        self.saveStorage = os.path.expanduser('~') + '\Desktop\\'
         self.radioBtn = []
         self.audioBtn = []
         self.initUi()
@@ -42,7 +42,8 @@ class ChoiceWindow(QMainWindow, Choice):
         self.title.setText(self.youtubeInfo['title'])
         self.time.setText(self.youtubeInfo['time'])
         self.url.setText('<a href=\"' + self.youtubeInfo['url'] + '\">' + self.youtubeInfo['url'] + '</a>')
-        self.storage.setText(self.saveStorage + self.youtubeInfo['title'] + '.mp4')
+        storage = os.path.expanduser('~') + '\Desktop\\' + self.youtubeInfo['title'] + '.mp4'
+        self.storage.setText(self.modifiyFileName(storage))
 
     def setPictureList(self):
         Ysize = 0
@@ -104,27 +105,25 @@ class ChoiceWindow(QMainWindow, Choice):
         if self.state == 1:
             for i, radioBtn in enumerate(self.radioBtn):
                 if radioBtn.isChecked():
-                    self.main.downloadPictureEvent(i, self.saveStorage)
+                    self.main.downloadPictureEvent(i, self.storage.text())
                     return
         else:
             for i, radioBtn in enumerate(self.audioBtn):
                 if radioBtn.isChecked():
-                    self.main.downlaodAudioEvent(i, self.saveStorage)
+                    self.main.downlaodAudioEvent(i, self.storage.text())
                     return
 
     def setPictureStorage(self):
         url = self.storage.text().split('.')
         url[1] = '.mp4'
-        self.saveStorage = url[0] + url[1]
-        self.storage.setText(self.saveStorage)
+        self.storage.setText(url[0] + url[1])
 
     def setAudioStorage(self):
         url = self.storage.text().split('.')
         for i, btn in enumerate(self.audioBtn):
             if btn.isChecked():
                 url[1] = '.' + self.audioInfo[i][2]
-                self.saveStorage = url[0] + url[1]
-                self.storage.setText(self.saveStorage)
+                self.storage.setText(url[0] + url[1])
                 return
 
     def fileOpne(self):
@@ -134,5 +133,9 @@ class ChoiceWindow(QMainWindow, Choice):
         else:
             fname = QFileDialog.getSaveFileName(self, filter='오디오 (*.webm *.mp4)')
         if fname[0]:
-            self.saveStorage = fname[0]
-            self.storage.setText(str(self.saveStorage))
+            self.storage.setText(fname[0])
+
+    def modifiyFileName(self, names):
+        name = names.split('\\')
+        name[-1] = re.sub('[\/:*?"<>|]', ' ', name[-1])
+        return '\\'.join(name)
