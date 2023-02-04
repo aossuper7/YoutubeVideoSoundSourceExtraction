@@ -9,7 +9,7 @@ class loadingBar:
 
     def setLoading(self, value, time):
         self.value += value
-        for i in range(self.GetInfoWindow.progressBar.value(), self.value + 1):
+        for i in range(self.GetInfoWindow.progressBar.value(), self.value + 2):
             self.GetInfoWindow.progressBar.setValue(i)
             sleep(time)
             if self.eve.is_set():

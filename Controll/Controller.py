@@ -46,7 +46,7 @@ class mainControll:
                                      self.YoutubeMovieList.getAudioList())
 
     def downloadPictureEvent(self, num, storage):
-        self.YoutubeMovieList.downloadPicture(num, storage)
+        th.Thread(target=self.YoutubeMovieList.downloadPicture, args=(num, storage), daemon=True).start()
         self.choice.close()
 
     def downlaodAudioEvent(self, num, storage):

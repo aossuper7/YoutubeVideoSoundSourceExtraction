@@ -133,7 +133,7 @@ class ChoiceWindow(QMainWindow, Choice):
         else:
             fname = QFileDialog.getSaveFileName(self, filter='오디오 (*.webm *.mp4)')
         if fname[0]:
-            self.storage.setText(fname[0])
+            self.storage.setText(fname[0].replace('/', '\\'))
 
     def modifiyFileName(self, names):
         name = names.split('\\')

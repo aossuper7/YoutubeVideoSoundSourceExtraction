@@ -1,5 +1,6 @@
 import pytube
 import pyperclip
+from Model import Encoding
 from PyQt5.QtWidgets import QMessageBox
 from threading import Thread
 import multiprocessing as mp
@@ -27,7 +28,7 @@ class YoutubeInfo:
 
     def loadPictureList(self, eve):
         resolutions = ['4320p', '2160p', '1440p', '1080p', '720p', '480p', '360p', '240p']
-        t1 = Thread(target=self.main.setLoading, args=(99, 0.0005), daemon=True)
+        t1 = Thread(target=self.main.setLoading, args=(98, 0.0005), daemon=True)
         t1.start()
         self.loadAudioList(eve)
         for resolution in resolutions:
@@ -40,7 +41,7 @@ class YoutubeInfo:
                 self.picture.append(youtube)
         t1.join()
         self.audio = self.youtube.streams.get_audio_only()
-        self.main.setLoading(1)
+        self.main.setLoading(2)
 
     def loadAudioList(self, eve):
         audios = self.youtube.streams.filter(only_audio=True).order_by('abr').desc()
@@ -51,8 +52,12 @@ class YoutubeInfo:
 
     def downloadPicture(self, num, storage):
         fileName, storage = self.modifyStorage(storage)
-        mp.Process(target=self.picture[num].download, args=(storage, 'video.mp4'), daemon=True).start()
-        mp.Process(target=self.audio.download, args=(storage, 'audio.mp3'), daemon=True).start()
+        t1 = mp.Process(target=self.picture[num].download, args=(storage, 'video'), daemon=True)
+        t1.start()
+        mp.Process(target=self.audio.download, args=(storage, 'audio'), daemon=True).start()
+        t1.join()
+        encoding = Encoding.Encoding()
+        encoding.encodingPictureAudio(storage+'video', storage+'audio', storage+fileName)
 
     def downloadAudio(self, num, storage):
         fileName, storage = self.modifyStorage(storage)
