@@ -3,7 +3,7 @@ import pyperclip
 from Model import Encoding
 from PyQt5.QtWidgets import QMessageBox
 from threading import Thread
-import multiprocessing as mp
+from multiprocessing import Process, Value
 
 
 class YoutubeInfo:
@@ -16,10 +16,12 @@ class YoutubeInfo:
         self.youtube = None
         self.GetInfoWindow = main.GetInfoWindow
         self.main = main
+        self.num = None
 
-    def checkLink(self):
+    def checkLink(self, loading):
         try:
             self.youtube = pytube.YouTube(pyperclip.paste())
+            self.youtube.register_on_progress_callback(loading)
             self.youtube.check_availability()  # youtube 링크 체크
             return True
         except:
@@ -52,16 +54,17 @@ class YoutubeInfo:
 
     def downloadPicture(self, num, storage):
         fileName, storage = self.modifyStorage(storage)
-        t1 = mp.Process(target=self.picture[num].download, args=(storage, 'video'), daemon=True)
+        self.num = num
+        t1 = Thread(target=self.picture[num].download, args=(storage, 'video'), daemon=True)
         t1.start()
-        mp.Process(target=self.audio.download, args=(storage, 'audio'), daemon=True).start()
+        Thread(target=self.audio.download, args=(storage, 'audio'), daemon=True).start()
         t1.join()
         encoding = Encoding.Encoding()
         encoding.encodingPictureAudio(storage+'video', storage+'audio', storage+fileName)
 
     def downloadAudio(self, num, storage):
         fileName, storage = self.modifyStorage(storage)
-        mp.Process(target=self.audioList[num].download, args=(storage, fileName), daemon=True).start()
+        Process(target=self.audioList[num].download, args=(storage, fileName), daemon=True).start()
 
     def modifyStorage(self, storage):
         fileName = storage.split('\\')

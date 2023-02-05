@@ -1,9 +1,10 @@
 from time import sleep
-import sys
+
 
 class loadingBar:
     def __init__(self, main, eve):
         self.value = 0
+        self.main = main.mainWindow
         self.GetInfoWindow = main.GetInfoWindow
         self.eve = eve
 
@@ -17,3 +18,7 @@ class loadingBar:
 
         if self.value == 100:
             self.value = 0
+
+    def downloadLoading(self, chunk, file_handle, bytes_remaining, picture, num):
+        progress = (100 * (picture[num].filesize - bytes_remaining)) / picture[num].filesize
+        self.main.custom_widget.progressBar.setValue(progress)

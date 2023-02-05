@@ -20,11 +20,13 @@ class InfoList(QObject):
     def setInfo(self, picture, audio, audioList):
         try:
             self.info['thumbnail'] = urllib.request.urlopen(self.youtube.thumbnail_url).read()
+            self.info['title'] = self.youtube.title
         except:
             self.info['thumbnail'] = urllib.request.urlopen(self.youtube.thumbnail_url).read()
-        self.info['title'] = self.youtube.title
+            self.info['title'] = self.youtube.title
         self.info['time'] = self.time()
         self.info['url'] = pyperclip.paste()
+
         t1 = Thread(target=self.savePictureInfo, args=(picture, audio.filesize_mb), daemon=True)
         t2 = Thread(target=self.saveAudioInfo, args=(audioList,), daemon=True)
         t1.start()

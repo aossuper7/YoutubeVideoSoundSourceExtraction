@@ -106,12 +106,13 @@ class ChoiceWindow(QMainWindow, Choice):
             for i, radioBtn in enumerate(self.radioBtn):
                 if radioBtn.isChecked():
                     self.main.downloadPictureEvent(i, self.storage.text())
-                    return
+                    break
         else:
             for i, radioBtn in enumerate(self.audioBtn):
                 if radioBtn.isChecked():
                     self.main.downlaodAudioEvent(i, self.storage.text())
-                    return
+                    break
+        self.close()
 
     def setPictureStorage(self):
         url = self.storage.text().split('.')
