@@ -19,3 +19,6 @@ class loadingBar:
     def downloadLoading(self, chunk, file_handle, bytes_remaining, picture, num):
         progress = (100 * (picture[num].filesize - bytes_remaining)) / picture[num].filesize
         self.main.custom_widget.progressBar.setValue(progress)
+
+    def __del__(self):
+        print('loadingBar 제거')

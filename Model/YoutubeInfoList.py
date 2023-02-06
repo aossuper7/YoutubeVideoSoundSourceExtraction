@@ -75,3 +75,7 @@ class InfoList(QObject):
             return '일반음질'
         else:
             return '저음질'
+
+    def __del__(self):
+        print('youtubeInfoList 제거')
+

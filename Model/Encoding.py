@@ -8,5 +8,5 @@ class Encoding:
         os.remove(pictureName)
         os.remove(audioName)
 
-    # def encodingAudio(self, audioName):
-    #     command =
+    def __del__(self):
+        print('encoding 제거')

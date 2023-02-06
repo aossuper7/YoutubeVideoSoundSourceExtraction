@@ -1,11 +1,7 @@
-import multiprocessing
-
 import pytube
 import pyperclip
-from Model import Encoding
 from PyQt5.QtWidgets import QMessageBox
 from threading import Thread
-from multiprocessing import Process
 
 
 class YoutubeInfo:
@@ -40,7 +36,7 @@ class YoutubeInfo:
         t2 = Thread(target=self.loadAudioList, args=(eve,), daemon=True)
         t1.start()
         t2.start()
-        # self.loadAudioList(eve)
+        self.loadAudioList(eve)
         for resolution in resolutions:
             youtube = self.youtubeMovie.streams \
                 .filter(mime_type='video/mp4', progressive=False, res=resolution) \
@@ -65,12 +61,8 @@ class YoutubeInfo:
     def downloadPicture(self, num, storage):
         self.fileName, self.storage = self.modifyStorage(storage)
         self.num = num
-        num_cores = multiprocessing.cpu_count()
-        pool = multiprocessing.Pool(num_cores)
-        pool.map(self.picture[num].download, [self.storage, 'video'])
-        pool.map(self.audio.download, [self.storage, 'audio'])
-        # Process(target=self.picture[num].download, args=(self.storage, 'video'), daemon=True).start()
-        # Process(target=self.audio.download, args=(self.storage, 'audio'), daemon=True).start()
+        Thread(target=self.picture[num].download, args=(self.storage, 'video'), daemon=True).start()
+        Thread(target=self.audio.download, args=(self.storage, 'audio'), daemon=True).start()
 
     def downloadAudio(self, num, storage):
         fileName, storage = self.modifyStorage(storage)
@@ -89,3 +81,6 @@ class YoutubeInfo:
 
     def getAudioList(self):
         return self.audioList
+
+    def __del__(self):
+        print('youtubeMovieList 제거')
