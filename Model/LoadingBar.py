@@ -16,9 +16,6 @@ class loadingBar:
             if self.eve.is_set():
                 return
 
-        if self.value == 100:
-            self.value = 0
-
     def downloadLoading(self, chunk, file_handle, bytes_remaining, picture, num):
         progress = (100 * (picture[num].filesize - bytes_remaining)) / picture[num].filesize
         self.main.custom_widget.progressBar.setValue(progress)

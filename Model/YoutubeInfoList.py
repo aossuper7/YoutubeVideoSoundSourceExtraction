@@ -18,12 +18,8 @@ class InfoList(QObject):
         self.signal.connect(lambda: main.newWindow())
 
     def setInfo(self, picture, audio, audioList):
-        try:
-            self.info['thumbnail'] = urllib.request.urlopen(self.youtube.thumbnail_url).read()
-            self.info['title'] = self.youtube.title
-        except:
-            self.info['thumbnail'] = urllib.request.urlopen(self.youtube.thumbnail_url).read()
-            self.info['title'] = self.youtube.title
+        self.info['thumbnail'] = urllib.request.urlopen(self.youtube.thumbnail_url).read()
+        self.info['title'] = self.youtube.title
         self.info['time'] = self.time()
         self.info['url'] = pyperclip.paste()
 

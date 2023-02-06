@@ -1,17 +1,20 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QListWidgetItem
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import *
 from View import ListWidgetItem
 
 main = uic.loadUiType('../View/MainWindows.ui')[0]
 
 
-class MainWindows(QMainWindow, main):
+class MainWindows(QMainWindow, QObject, main):
+    signal = pyqtSignal(object)
+
     def __init__(self, controller):
         super().__init__()
+        QObject.__init__(self)
         self.setupUi(self)
-        self.index = 0
-        self.download.clicked.connect(lambda: controller.downloadClickEvent(self))
+        self.signal.connect(lambda: controller.downloadClickEvent(self))
+        self.download.clicked.connect(lambda: self.signal.emit(self))
         self.show()
         self.custom_widget = None
 

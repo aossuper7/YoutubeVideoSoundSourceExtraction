@@ -3,7 +3,7 @@ import View.GetInfoWindow as GetInfoWindow
 import View.ChoiceWindow as ChoiceWindow
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import *
-from Model import YoutubeMovieList, YoutubeInfoList, LoadingBar
+from Model import YoutubeMovieList, YoutubeInfoList, LoadingBar, Encoding
 import threading as th
 import sys
 
@@ -19,13 +19,14 @@ class mainControll:
         self.choice = None
         self.eve = None
 
+    @pyqtSlot(object)
     def downloadClickEvent(self, parent):
         self.parent = parent
-        self.GetInfoWindow = GetInfoWindow.GetInfo(self)
         self.eve = th.Event()
+        self.GetInfoWindow = GetInfoWindow.GetInfo(self)
         self.loadingBar = LoadingBar.loadingBar(self, self.eve)
         self.YoutubeMovieList = YoutubeMovieList.YoutubeInfo(self)
-        if self.YoutubeMovieList.checkLink(self.downloadState):
+        if self.YoutubeMovieList.checkLink(self.downloadState, self.encoding):
             self.YoutubeInfoList = YoutubeInfoList.InfoList(self)
             th.Thread(target=self.saveYoutube, daemon=True).start()
 
@@ -57,6 +58,11 @@ class mainControll:
 
     def downlaodAudioEvent(self, num, storage):
         self.YoutubeMovieList.downloadAudio(num, storage)
+
+    def encoding(self, stream, file_handle):
+        storage = self.YoutubeMovieList.storage
+        en = Encoding.Encoding()
+        en.encodingPictureAudio(storage + 'video', storage + 'audio', storage + self.YoutubeMovieList.fileName)
 
 
 if __name__ == '__main__':
