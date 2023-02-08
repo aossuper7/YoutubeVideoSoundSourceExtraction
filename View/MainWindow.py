@@ -1,13 +1,12 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QApplication
-import sys
+from PyQt5.QtWidgets import QMainWindow
 
-main = uic.loadUiType('View/MainWindows.ui')[0]
+ui = uic.loadUiType('../View/MainWindow.ui')[0]
 
 
-class MainWindows(QMainWindow, main):
-    def __init__(self):
+class MainWindow(QMainWindow, ui):
+    def __init__(self, main):
         super().__init__()
         self.setupUi(self)
+        self.download.clicked.connect(lambda: main.downloadClickEvent())
         self.show()
-        QApplication(sys.argv).exec_()
