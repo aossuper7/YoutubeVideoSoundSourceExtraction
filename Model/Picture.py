@@ -14,14 +14,20 @@ class Picture:
     def checkLink(self):
         try:
             self.movie.check_availability()
+            return True
         except:
             QMessageBox.warning(self.mainWindow, '8k Youtube downlaoder', '잘못된 링크 입니다.')
+            self.controller.progressBar.close()
 
     def makeMovieList(self):
+        t1 = self.startProgressBar()
         for resolution in self.resolutions:
             movie = self.movie.streams.filter(mime_type='video/mp4', res=resolution).first()
             if self.controller.stop_thread:
                 return
             if movie:
                 self.movieList.append(movie)
+        t1.join()
 
+    def startProgressBar(self):
+        return self.controller.setProgressBar(100, 0.005)

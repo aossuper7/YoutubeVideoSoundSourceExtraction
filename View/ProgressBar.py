@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QCloseEvent
 from time import sleep
 
@@ -12,6 +12,8 @@ class Progressbar(QMainWindow, ui):
         self.setupUi(self)
         self.controller = controller
         self.value = 0
+        self.show()
+        QApplication.processEvents()
 
     def startProgressBar(self, value, time):
         self.value = value
@@ -23,3 +25,4 @@ class Progressbar(QMainWindow, ui):
 
     def closeEvent(self, a0: QCloseEvent) -> None:
         self.controller.stop_thread = True
+
