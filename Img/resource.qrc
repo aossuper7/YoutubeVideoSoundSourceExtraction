@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Icon">
+    <file>progressBar.gif</file>
     <file>length.png</file>
     <file>link.png</file>
     <file>download.png</file>
