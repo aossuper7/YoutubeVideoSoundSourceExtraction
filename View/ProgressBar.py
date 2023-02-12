@@ -11,7 +11,6 @@ class Progressbar(QMainWindow, ui):
         super().__init__(mainWindow)
         self.setupUi(self)
         self.controller = controller
-        self.value = 0
         self.startProgressBar()
 
     def startProgressBar(self):
@@ -19,10 +18,10 @@ class Progressbar(QMainWindow, ui):
         movie.setCacheMode(QMovie.CacheAll)
         size = QSize(481, 31)
         movie.setScaledSize(size)
-        self.label.setMovie(movie)
         movie.start()
+        self.label.setMovie(movie)
+
 
     def closeEvent(self, a0: QCloseEvent) -> None:
-        if self.value != 100:
-            self.controller.stop_thread = True
+        self.controller.stop_thread = True
 
