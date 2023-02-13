@@ -1,14 +1,18 @@
-
-
 class PictureListInfo:
     pictureList = []
 
     def __init__(self, picture, audio):
         self.picture = picture
         self.audio = audio
+        self.getPictureList()
+
+    def getPictureList(self):
+        for picture in self.picture:
+            self.pictureList.append([self.getResolutionGrade(picture), self.getResolution(picture),
+                                     self.getFileSize(picture)])
 
     def getResolutionGrade(self, picture):
-        resolution = picture.resolution[:-1]
+        resolution = int(picture.resolution[:-1])
         if resolution >= 2160:
             return '초고화질(UHD)'
         elif resolution >= 480:
@@ -19,7 +23,7 @@ class PictureListInfo:
             return '저화질'
 
     def getResolution(self, picture):
-        resolution = picture.resolution[:-1]
+        resolution = int(picture.resolution[:-1])
         resol = ''
         if resolution == 4320:
             resol += '8K ' + str(picture.fps) + 'fps' + self.getHDR(picture)
@@ -38,9 +42,9 @@ class PictureListInfo:
         else:
             return ''
 
-    def getfilesize(self, picture):
+    def getFileSize(self, picture):
         size = picture.filesize_mb + self.audio.filesize_mb
         if size >= 1024:
-            return round(size/1024, 2)
+            return str(round(size/1024, 2)) + 'GB'
         else:
-            return picture.filesize_mb
+            return str(round(picture.filesize_mb, 1)) + 'MB'
