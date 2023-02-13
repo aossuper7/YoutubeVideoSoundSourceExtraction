@@ -20,7 +20,6 @@ class Controll:
         self.makeMovieList.started.connect(self.picture.makeMovieList)
 
     def downloadClickEvent(self):
-        QApplication.processEvents()
         self.mainInfo = MainInfo.MainInfo()
         if self.picture.checkLink():
             self.progressBar.show()

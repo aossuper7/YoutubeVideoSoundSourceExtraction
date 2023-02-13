@@ -11,6 +11,7 @@ class DownloadList(QMainWindow, ui):
         self.mainInfo = mainInfo
         self.setupUi(self)
         self.setMainInfo()
+        self.cancelBtn.clicked.connect(lambda: self.close())
         self.show()
 
     def setMainInfo(self):
@@ -18,3 +19,6 @@ class DownloadList(QMainWindow, ui):
         pixmap.loadFromData(self.mainInfo.thumbnail)
         self.thumbnail.setPixmap(pixmap)
         self.thumbnail.setScaledContents(True)
+        self.title.setText(self.mainInfo.title)
+        self.time.setText(self.mainInfo.time)
+        self.link.setText('<a href="'+self.mainInfo.url+'">'+self.mainInfo.url+'</a>')
